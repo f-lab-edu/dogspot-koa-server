@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  idx                  Int      @id @default(autoincrement())
+  email               String    @unique
+  nickname            String
+  profile_path         String?
+  agree_with_marketing  Boolean
+  login_method         String?
+  refresh_token       String?
+  password            String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+}
+
+
+model board_media {
+  idx             Int       @id @default(autoincrement())
+  walks_board_idx  Int
+  type           String
+  thumbnail      String? 
+  url            String
+  sequence        Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+
+  @@index([walks_board_idx])
+}
+
+model walks_board {
+  idx             Int           @id @default(autoincrement())
+  user_idx         Int
+  title           String        @db.VarChar(1000)
+  description     String
+  location        String
+  places          String
+  meetingDatetime DateTime
+  thumbnail       String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+}
+
+model ref_token {
+  idx             Int           @id @default(autoincrement())
+  user_idx         Int
+  platform           String?        @db.VarChar(100)
+  ref_token     String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+}
