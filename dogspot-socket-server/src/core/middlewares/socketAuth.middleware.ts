@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { UserRepository } from '../domains/user/repositories/userRepository';
+import { UserRepository } from '../../domains/user/repositories/userRepository';
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ export const socketAuthMiddleware = async(socket: Socket, next: (err?: Error) =>
   try {
     const decoded = jwt.verify(token, secret) as { userIdx: number, OS: string, iat: number, exp: number };
     const user = await userRepository.findUserByIdx(decoded.userIdx);
-    console.log('decoded##" ', user);
+    console.log('decoded:" ', user);
     
     // socket.user = decoded; // 디코딩된 사용자 정보를 소켓에 저장
     next();
