@@ -1,13 +1,11 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
-import { socketAuthMiddleware } from '../middlewares/socketAuth.middleware';
+import { socketAuthMiddleware } from '../core/middlewares/socketAuth.middleware';
 
 let ioPush: SocketIOServer | undefined;
 const users: { [key: number]: Socket } = {}; // 사용자별 소켓 저장
 
 export const setupPush = (server: HttpServer): void => {
-  console.log('!!!!!!!!!!!!!');
-  
   ioPush = new SocketIOServer(server, {
     path: '/push',
     cors: {
@@ -33,7 +31,6 @@ export const setupPush = (server: HttpServer): void => {
     });
 
     socket.on('new_post', (post) => {
-      console.log('New post received:', post);
       const userId = post.userId; // 게시글의 작성자의 userId를 전달받음
       const userSocket = users[253];
       if (userSocket) {
