@@ -1,8 +1,10 @@
 import { Kafka, logLevel } from 'kafkajs';
 
+const kafkaUrl: string = process.env.KAFKA_URL || '';
+
 const kafka = new Kafka({
-  clientId: 'my-app',
-  brokers: ['220.95.246.96:9092'],
+  clientId: process.env.KAFKA_ID,
+  brokers: [kafkaUrl],
   logLevel: logLevel.INFO, // Adjust as needed
 });
 
