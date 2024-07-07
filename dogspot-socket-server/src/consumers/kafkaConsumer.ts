@@ -27,7 +27,7 @@ export const runConsumer = async () => {
       switch (topic) {
         case Topic.WALKS_PUSH:
           data.forEach((item: any) => {
-            sendPushToUser(item.user_idx, '모임에 참석했습니다.');
+            sendPushToUser(item.userIdx, item.message);
           });
           break;
         default:
