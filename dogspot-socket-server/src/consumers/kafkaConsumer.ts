@@ -2,15 +2,12 @@ import kafka from '../core/config/kafkaConfig';
 import { Topic } from './helpers/constants';
 import { sendPushToUser } from '../modules/push.module'; // sendPushToUser 함수 import
 
-const topic = 'walks-push';
-const groupId = 'test-group';
-
+const groupId = process.env.KAFKA_GROUP_ID || 'default-group-id';
 const consumer = kafka.consumer({ groupId });
 
 export const runConsumer = async () => {
-  console.log('Consumer is starting...');
   await consumer.connect();
-  await consumer.subscribe({ topic });
+  await consumer.subscribe({ topic: Topic.WALKS_PUSH });
   console.log('Consumer is connected and subscribed.');
 
   await consumer.run({
