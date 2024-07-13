@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "dogspot-socket-server",
-      "script": "./src/main.ts",
+      "script": "src/main.ts",
       "watch": false,
       "instance_var": "0",
       "ignore_watch": [
