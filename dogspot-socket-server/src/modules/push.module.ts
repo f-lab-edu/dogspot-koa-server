@@ -6,6 +6,8 @@ let ioPush: SocketIOServer | undefined;
 const users: { [key: number]: Socket } = {}; // 사용자별 소켓 저장
 
 export const setupPush = (server: HttpServer): void => {
+  console.log('!!!!!!!!!!!!!');
+  
   ioPush = new SocketIOServer(server, {
     path: '/push',
     cors: {
