@@ -1,10 +1,13 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
+import { socketAuthMiddleware } from '../middlewares/socketAuth.middleware';
 
 let ioPush: SocketIOServer | undefined;
 const users: { [key: number]: Socket } = {}; // 사용자별 소켓 저장
 
 export const setupPush = (server: HttpServer): void => {
+  console.log('!!!!!!!!!!!!!');
+  
   ioPush = new SocketIOServer(server, {
     path: '/push',
     cors: {
@@ -13,6 +16,8 @@ export const setupPush = (server: HttpServer): void => {
       allowedHeaders: ['Content-Type'], // 허용할 헤더 설정
     }
   });
+  
+  ioPush.use(socketAuthMiddleware);
 
   ioPush.on('connection', (socket: Socket) => {
     socket.on('disconnect', () => {
