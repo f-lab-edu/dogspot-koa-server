@@ -4,7 +4,7 @@ import http from 'http';
 import cors from '@koa/cors';
 
 import { setupPush } from './modules/push.module';
-import { runConsumer } from './consumers/kafkaConsumer'; 
+import { runConsumer } from './kafka/consumer'; 
 
 const router = new Router();
 const app = new Koa();
@@ -31,6 +31,5 @@ setupPush(server);
 // 서버 포트 설정
 const PORT = 3003;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
   runConsumer().catch(console.error);
 });

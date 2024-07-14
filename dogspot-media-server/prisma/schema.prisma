@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  idx                  Int      @id @default(autoincrement())
+  email               String    @unique
+  nickname            String
+  profile_path         String?
+  agree_with_marketing  Boolean
+  login_method         String?
+  refresh_token       String?
+  password            String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+
+   walks_participants walks_participants[]  // Add this line to establish the relation
+   walks_boards         walks_board[]
+}
+
+
+model board_media {
+  idx             Int       @id @default(autoincrement())
+  walks_board_idx  Int
+  type           String
+  original_file_url            String
+  thumbnail_url      String? 
+  url            String?
+  sequence        Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+
+  @@index([walks_board_idx])
+}
+
+model walks_board {
+  idx             Int           @id @default(autoincrement())
+  user_idx         Int
+  title           String        @db.VarChar(1000)
+  description     String
+  location        String
+  places          String
+  meeting_datetime DateTime
+  max_participants Int
+  thumbnail       String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+
+   user              user          @relation(fields: [user_idx], references: [idx]) // 추가된 사용자와의 관계 설정
+   participants    walks_participants[] // walks_participants와의 관계 설정
+
+}
+
+model walks_participants {
+  idx             Int       @id @default(autoincrement())
+  walks_board_idx  Int
+  user_idx  Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+
+  user user @relation(fields: [user_idx], references: [idx])  // Add this line to establish the relation
+  walks_board      walks_board  @relation(fields: [walks_board_idx], references: [idx])
+
+  @@index([walks_board_idx])
+}
+
+
+model ref_token {
+  idx             Int           @id @default(autoincrement())
+  user_idx         Int
+  platform           String?        @db.VarChar(100)
+  ref_token     String
+  created_at         DateTime @default(now())
+  updated_at         DateTime? @updatedAt
+  deleted_at         DateTime?
+}

@@ -30,7 +30,7 @@ export const setupPush = (server: HttpServer): void => {
       
     });
 
-    socket.on('new_post', (post) => {
+    socket.on('new_post', (post: any) => {
       const userId = post.userId; // 게시글의 작성자의 userId를 전달받음
       const userSocket = users[253];
       if (userSocket) {
