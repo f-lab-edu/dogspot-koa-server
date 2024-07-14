@@ -1,4 +1,5 @@
 export enum Topic {
-  WALKS = 'walks',
   WALKS_PUSH = 'walks-push',
+  WALKS = 'walks',
+  WALKS_BOARD_CREATE = 'walks-board-create',
 }
