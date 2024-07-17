@@ -1,5 +1,6 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
+import { socketAuthMiddleware } from '../core/middlewares/socketAuth.middleware';
 
 let ioPush: SocketIOServer | undefined;
 const users: { [key: number]: Socket } = {}; // 사용자별 소켓 저장
@@ -13,6 +14,8 @@ export const setupPush = (server: HttpServer): void => {
       allowedHeaders: ['Content-Type'], // 허용할 헤더 설정
     }
   });
+  
+  ioPush.use(socketAuthMiddleware);
 
   ioPush.on('connection', (socket: Socket) => {
     socket.on('disconnect', () => {
@@ -28,7 +31,6 @@ export const setupPush = (server: HttpServer): void => {
     });
 
     socket.on('new_post', (post) => {
-      console.log('New post received:', post);
       const userId = post.userId; // 게시글의 작성자의 userId를 전달받음
       const userSocket = users[253];
       if (userSocket) {
@@ -50,6 +52,8 @@ export const getPushIoInstance = (): SocketIOServer => {
 
 // 특정 사용자에게 메시지 보내기
 export const sendPushToUser = (userId: number, message: any): void => {
+  console.log("userId 유저에게 발송: ", userId);
+  console.log("message: ", message);
   const userSocket = users[userId];
   if (userSocket) {
     userSocket.emit('new_post', message);
