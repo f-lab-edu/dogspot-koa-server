@@ -1,4 +1,6 @@
 import kafka from '../core/config/kafkaConfig';
+import { EachMessagePayload } from 'kafkajs';
+
 import { walksControllerInstance } from '../domains/walks/walks.controller';
 import { Topic } from './helpers/constants';
 
@@ -11,7 +13,7 @@ export const runConsumer = async () => {
   await consumer.subscribe({ topic: Topic.WALKS_BOARD_CREATE });
 
   await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
+    eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
 
       if (message.value === null) {
         return;
