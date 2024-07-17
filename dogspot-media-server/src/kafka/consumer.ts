@@ -14,7 +14,8 @@ export const runConsumer = async () => {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
-
+     
+      
       if (message.value === null) {
         return;
       }
@@ -22,6 +23,7 @@ export const runConsumer = async () => {
       try {
         const value = message.value.toString(); 
         const data = JSON.parse(value); 
+        console.log('카프카 컨슈밍!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ', data);
         // 메시지 처리 로직을 호출
         switch (topic) {
           case Topic.WALKS_BOARD_CREATE:
