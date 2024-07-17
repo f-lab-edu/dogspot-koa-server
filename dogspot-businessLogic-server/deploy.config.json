@@ -1,0 +1,21 @@
+{
+  "apps": [
+    {
+      "name": "dogspot-businessLogic-server",
+      "script": "src/main.ts",
+      "watch": false,
+      "instance_var": "0",
+      "ignore_watch": [
+        "node_modules"
+      ],
+      "env": {
+        "NODE_PATH": ".",
+        "NODE_ENV": "development"
+      },
+      "env_production": {
+        "NODE_PATH": ".",
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
