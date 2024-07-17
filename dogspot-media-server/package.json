@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/main.ts"
+    "start": "ts-node src/main.ts",
+    "start:pm2prod": "pm2 start deploy.config.json --env production"
   },
   "keywords": [],
   "author": "",
