@@ -2,23 +2,15 @@ import kafka from '../core/config/kafkaConfig';
 import { walksControllerInstance } from '../domains/walks/walks.controller';
 import { Topic } from './helpers/constants';
 import { EachMessagePayload } from 'kafkajs';
-
-// 동적 import를 위한 비동기 함수
-const loadPLimit = async () => {
-  const module = await import('p-limit');
-  return module.default;
-};
+import pLimit from 'p-limit';  // ES 모듈로부터 직접 import
 
 const groupId = process.env.KAFKA_GROUP_ID || 'default-group-id';
 const consumer = kafka.consumer({ groupId });
 
-export const runConsumer = async () => {
-  // p-limit 모듈을 동적으로 불러옵니다.
-  const pLimit = await loadPLimit();
-  
-  // 동시에 최대 5개의 메시지를 처리하도록 제한
-  const limit = pLimit(5);
+// 동시에 최대 5개의 메시지를 처리하도록 제한
+const limit = pLimit(5);
 
+export const runConsumer = async () => {
   await consumer.connect();
   await consumer.subscribe({ topic: Topic.WALKS_BOARD_CREATE });
 
@@ -31,8 +23,8 @@ export const runConsumer = async () => {
             console.warn('Received a message with null value');
             return;
           }
-          const value = message.value.toString(); // 여기서 message.value는 null이 아님을 보장합니다.
-          const data = JSON.parse(value); // JSON 파싱
+          const value = message.value.toString();  // 여기서 message.value는 null이 아님을 보장합니다.
+          const data = JSON.parse(value);  // JSON 파싱
 
           let result;
 
