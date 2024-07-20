@@ -2,15 +2,23 @@ import kafka from '../core/config/kafkaConfig';
 import { walksControllerInstance } from '../domains/walks/walks.controller';
 import { Topic } from './helpers/constants';
 import { EachMessagePayload } from 'kafkajs';
-import pLimit from 'p-limit';
+
+// 동적 import를 위한 비동기 함수
+const loadPLimit = async () => {
+  const module = await import('p-limit');
+  return module.default;
+};
 
 const groupId = process.env.KAFKA_GROUP_ID || 'default-group-id';
 const consumer = kafka.consumer({ groupId });
 
-// 동시에 최대 5개의 메시지를 처리하도록 제한
-const limit = pLimit(5);
-
 export const runConsumer = async () => {
+  // p-limit 모듈을 동적으로 불러옵니다.
+  const pLimit = await loadPLimit();
+  
+  // 동시에 최대 5개의 메시지를 처리하도록 제한
+  const limit = pLimit(5);
+
   await consumer.connect();
   await consumer.subscribe({ topic: Topic.WALKS_BOARD_CREATE });
 
