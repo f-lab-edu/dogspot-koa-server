@@ -1,0 +1,23 @@
+config:
+  target: 'https://dogspot.site'
+  phases:
+    - duration: 60
+      arrivalRate: 1
+
+scenarios:
+  - flow:
+      - post:
+          url: '/api/walksBoard/walksBoard'
+          headers:
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMTQ5MDIzOCwiZXhwIjoxNzIxNDk3NDM4fQ.elUAd1Hv4g-Vx_P2feRnbl3FL7aoG4MJNdO79xnEfWg'
+          formData:
+            maxParticipants: '8'
+            places: '실제 지도 위치.'
+            thumbnail: '이미지 썸네일입니다.'
+            userIdx: '1'
+            location: '간단한 장소 위치.'
+            meetingDatetime: '2023-06-13T00:00:00.000Z'
+            title: '오늘 오후 보라메 공원에서 산책하실분?'
+            description: '게시글에 대한 내용입니다.'
+            files:
+                fromFile: './video.mov'

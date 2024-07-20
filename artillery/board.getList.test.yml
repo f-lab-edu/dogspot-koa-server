@@ -1,0 +1,20 @@
+config:
+  target: 'https://dogspot.site'  # API 서버의 URL
+  phases:
+    - duration: 60  # 테스트 지속 시간 (초)
+      arrivalRate: 5  # 초당 요청 수
+      name: 'Ramp-up phase'  # 테스트 단계 이름
+    - duration: 60
+      arrivalRate: 10
+      name: 'Steady state'
+
+scenarios:
+  - flow:
+      - get:
+          url: '/api/walksBoard/walksBoard'
+          qs:
+            page: 1
+            size: 20
+            order: DESC
+          headers:
+            Accept: 'application/json'

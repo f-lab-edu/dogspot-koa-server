@@ -1,12 +1,14 @@
 import kafka from '../core/config/kafkaConfig';
-import { EachMessagePayload } from 'kafkajs';
-
 import { walksControllerInstance } from '../domains/walks/walks.controller';
 import { Topic } from './helpers/constants';
-
+import { EachMessagePayload } from 'kafkajs';
+import pLimit from 'p-limit';
 
 const groupId = process.env.KAFKA_GROUP_ID || 'default-group-id';
 const consumer = kafka.consumer({ groupId });
+
+// 동시에 최대 5개의 메시지를 처리하도록 제한
+const limit = pLimit(5);
 
 export const runConsumer = async () => {
   await consumer.connect();
@@ -14,30 +16,35 @@ export const runConsumer = async () => {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
-     
-      
-      if (message.value === null) {
-        return;
-      }
-      
       try {
-        const value = message.value.toString(); 
-        const data = JSON.parse(value); 
-        console.log('카프카 컨슈밍!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ', data);
-        // 메시지 처리 로직을 호출
-        switch (topic) {
-          case Topic.WALKS_BOARD_CREATE:
-            await walksControllerInstance.walksBoartConvert(data);
-            break;
-          default:
-            break;
-        }
+        // p-limit을 사용하여 동시 실행 수를 제한합니다.
+        await limit(async () => {
+          if (message.value === null) {
+            console.warn('Received a message with null value');
+            return;
+          }
+          const value = message.value.toString(); // 여기서 message.value는 null이 아님을 보장합니다.
+          const data = JSON.parse(value); // JSON 파싱
 
-        // 메시지 처리가 성공했으면 오프셋을 커밋
-        await consumer.commitOffsets([{ topic, partition, offset: message.offset }]);
-        
+          let result;
+
+          // 메시지 처리 로직 호출
+          switch (topic) {
+            case Topic.WALKS_BOARD_CREATE:
+              result = await walksControllerInstance.walksBoartConvert(data);
+              break;
+            default:
+              break;
+          }
+
+          // 메시지 처리가 성공했으면 오프셋을 커밋합니다.
+          if (result) {
+            await consumer.commitOffsets([{ topic, partition, offset: (BigInt(message.offset) + BigInt(1)).toString() }]);
+          }
+        });
+
       } catch (error) {
-        throw new Error(`Error in runConsumer eachMessage: ${error}`);
+        console.error(`Error in runConsumer eachMessage: ${error}`);
       }
     },
   });

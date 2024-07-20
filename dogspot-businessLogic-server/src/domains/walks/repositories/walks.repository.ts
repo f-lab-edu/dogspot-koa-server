@@ -50,11 +50,11 @@ export class walksRepository {
         },
       });
 
-      if (participant) {
-        throw new Error(
-          `User ${dto.userDto.idx} is already a participant of board ${warlsBoard.idx}`,
-        );
-      }
+      // if (participant) {
+      //   throw new Error(
+      //     `User ${dto.userDto.idx} is already a participant of board ${warlsBoard.idx}`,
+      //   );
+      // }
       // 해당 게시글의 총 참여자 수 계산
       const participantCount = await this.prisma.walks_participants.count({
         where: {
@@ -62,11 +62,11 @@ export class walksRepository {
         },
       });
 
-      if (warlsBoard.max_participants <= participantCount) {
-        throw new Error(
-          `Board ${warlsBoard.idx} has reached the maximum number of participants`,
-        );
-      }
+      // if (warlsBoard.max_participants <= participantCount) {
+      //   throw new Error(
+      //     `Board ${warlsBoard.idx} has reached the maximum number of participants`,
+      //   );
+      // }
     } catch (error) {
       console.error('Failed to check user and count participants:', error);
       throw new Error(

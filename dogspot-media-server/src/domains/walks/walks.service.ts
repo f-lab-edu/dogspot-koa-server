@@ -10,7 +10,7 @@ export class walksService {
     this.walksRepo = new walksRepository();
     this.fileService = new FileService();
   }
-  async walksBoard(walksBoardIdx: number) {
+  async walksBoard(walksBoardIdx: number): Promise<boolean> {
     try {
       const walksMediaInfos = await this.walksRepo.getBoardMedia(walksBoardIdx); 
       
@@ -25,7 +25,7 @@ export class walksService {
           result.coverPhotoPath
         );
       }
-      
+      return true;
       // await sendMessageToTopic(Topic.WALKS_PUSH, message);
     } catch (error) {
       throw new Error(`Failed at walksService -> walksBoard ${error}`);
