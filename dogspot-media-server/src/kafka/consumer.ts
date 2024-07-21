@@ -55,7 +55,7 @@ export const runConsumer = async () => {
           // 메시지 처리 로직 호출
           switch (topic) {
             case Topic.WALKS_BOARD_CREATE:
-              result = await walksControllerInstance.walksBoartConvert(data);
+              result = await walksControllerInstance.walksBoardConvert(data.idx);
               break;
             default:
               break;

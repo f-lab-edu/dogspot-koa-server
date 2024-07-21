@@ -23,7 +23,6 @@ export class FileConvertService {
             if (subDir && !fs.existsSync(videoFolder)) {
                 fs.mkdirSync(videoFolder, { recursive: true });
             }
-            console.log('orifinalVideo: ', orifinalVideo);
             
             // .m4 파일 변환
             const executeFfmpeg = promisify(exec);

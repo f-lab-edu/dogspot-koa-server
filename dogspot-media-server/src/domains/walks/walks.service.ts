@@ -1,3 +1,4 @@
+import logger from "../../core/config/logger.config";
 import { FileService } from "../file/file.service";
 import { walksRepository } from "./repositories/walks.repository";
 
@@ -10,23 +11,23 @@ export class walksService {
     this.walksRepo = new walksRepository();
     this.fileService = new FileService();
   }
-  async walksBoard(walksBoardIdx: number): Promise<boolean> {
+  async convertMedia(walksBoardIdx: number): Promise<boolean> {
     try {
       const walksMediaInfos = await this.walksRepo.getBoardMedia(walksBoardIdx); 
-      
-      for(let i = 0; i < walksMediaInfos.length; i++){
-        const result = await this.fileService.walksBoardfile(walksMediaInfos[i]); 
-        if(!result){
-          throw new Error(`Failed at walksService -> walksBoard`);
+      for (let i = 0; i < walksMediaInfos.length; i++) {
+        const mediaInfo = walksMediaInfos[i];
+        try {
+          const result = await this.fileService.walksBoardMediaConvert(mediaInfo);
+          if (!result) {
+            throw new Error(`Failed to convert media with idx: ${mediaInfo.idx}`);
+          }
+          await this.walksRepo.updateBoardMedia(mediaInfo.idx, result.outputPath, result.coverPhotoPath);
+        } catch (error) {
+          logger.error(`Error converting at walksBoard media idx ${mediaInfo.idx}:`, error);
+          throw error;
         }
-        await this.walksRepo.updateBoardMedia(
-          walksMediaInfos[i].idx, 
-          result.outputPath, 
-          result.coverPhotoPath
-        );
       }
       return true;
-      // await sendMessageToTopic(Topic.WALKS_PUSH, message);
     } catch (error) {
       throw new Error(`Failed at walksService -> walksBoard ${error}`);
     }

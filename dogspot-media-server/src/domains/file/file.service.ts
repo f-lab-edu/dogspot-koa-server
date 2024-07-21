@@ -10,7 +10,7 @@ export class FileService {
     constructor() {
         this.fileConvertService = new FileConvertService();
     }
-    async walksBoardfile(walksMediaInfos: board_media): 
+    async walksBoardMediaConvert(walksMediaInfos: board_media): 
       Promise<{ outputPath: string, coverPhotoPath: string } | undefined> {
         const fileNameWithExt = path.basename(walksMediaInfos.original_file_url);
         const baseFileName = fileNameWithExt.replace(/\.[^/.]+$/, ""); // 확장자를 제거합니다.
