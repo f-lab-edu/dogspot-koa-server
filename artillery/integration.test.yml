@@ -1,0 +1,53 @@
+config:
+  target: 'https://dogspot.site'
+  phases:
+    - duration: 60  # 총 테스트 지속 시간
+      arrivalRate: 2  # 초당 요청 수 (전체 요청 비율)
+      name: 'Initial phase'
+
+    - duration: 60
+      arrivalRate: 5
+      name: 'Join phase'
+
+    - duration: 60
+      arrivalRate: 100
+      name: 'High load phase'
+
+scenarios:
+  - flow:
+      - post:
+          url: '/api/walksBoard/walksBoard'
+          headers:
+            Authorization: 'Bearer YOUR_ACCESS_TOKEN'
+          formData:
+            maxParticipants: '8'
+            places: '실제 지도 위치.'
+            thumbnail: '이미지 썸네일입니다.'
+            userIdx: '1'
+            location: '간단한 장소 위치.'
+            meetingDatetime: '2023-06-13T00:00:00.000Z'
+            title: '오늘 오후 보라메 공원에서 산책하실분?'
+            description: '게시글에 대한 내용입니다.'
+            files:
+              fromFile: './video.mov'
+
+  - flow:
+      - post:
+          url: '/api/walksBoard/walksBoard/join'
+          headers:
+            accept: 'application/json'
+            Authorization: 'Bearer YOUR_ACCESS_TOKEN'
+            Content-Type: 'application/json'
+          json:
+            idx: 1
+            userDto: 1
+
+  - flow:
+      - get:
+          url: '/api/walksBoard/walksBoard'
+          qs:
+            page: 1
+            size: 20
+            order: DESC
+          headers:
+            Accept: 'application/json'

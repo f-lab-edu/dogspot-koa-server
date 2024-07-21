@@ -1,0 +1,17 @@
+config:
+  target: 'https://dogspot.site'
+  phases:
+    - duration: 60  # 테스트 지속 시간 (초)
+      arrivalRate: 5  # 초당 요청 수
+
+scenarios:
+  - flow:
+      - post:
+          url: '/api/walksBoard/walksBoard/join'
+          headers:
+            accept: 'application/json'
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMTQ4NjcyNSwiZXhwIjoxNzIxNDkzOTI1fQ.k3-A31PpwRJ8ORiKqece1DP09wPkiLM0UWEfSGJMMzs'
+            Content-Type: 'application/json'
+          json:
+            idx: 1
+            userDto: 1
