@@ -1,4 +1,6 @@
 import kafka from '../core/config/kafkaConfig';
+import { EachMessagePayload } from 'kafkajs';
+
 import { Topic } from './helpers/constants';
 import { sendPushToUser } from '../modules/push.module'; // sendPushToUser 함수 import
  
@@ -11,7 +13,7 @@ export const runConsumer = async () => {
   console.log('Consumer is connected and subscribed.');
 
   await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
+    eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
       if (message.value === null) {
         console.warn('Received null message. Skipping...');
         return;
@@ -20,9 +22,20 @@ export const runConsumer = async () => {
       let data;
       try {
         data = JSON.parse(value); // JSON 문자열을 객체로 파싱
+        
         // 메시지 처리가 완료되면 오프셋을 커밋합니다.
         switch (topic) {
           case Topic.WALKS_PUSH:
+            data.forEach((item: any) => {
+              sendPushToUser(item.userIdx, item.message);
+            });
+            break;
+          case Topic.WALKS_DELETE:
+            data.forEach((item: any) => {
+              sendPushToUser(item.userIdx, item.message);
+            });
+            break;
+          case Topic.WALKS_ERROR:
             data.forEach((item: any) => {
               sendPushToUser(item.userIdx, item.message);
             });

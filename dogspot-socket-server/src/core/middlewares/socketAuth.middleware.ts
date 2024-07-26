@@ -12,7 +12,7 @@ export const socketAuthMiddleware = async(socket: Socket, next: (err?: Error) =>
   if (!token) {
     return next(new Error('Authorization token is missing'));
   }
-
+  
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     return next(new Error('JWT_SECRET is not defined'));
@@ -21,8 +21,9 @@ export const socketAuthMiddleware = async(socket: Socket, next: (err?: Error) =>
   try {
     const decoded = jwt.verify(token, secret) as { userIdx: number, OS: string, iat: number, exp: number };
     const user = await userRepository.findUserByIdx(decoded.userIdx);
-    console.log('decoded:" ', user);
-    
+    if (!user) {
+      return next(new Error('유저 정보를 찾을 수 없습니다.'));
+    }
     // socket.user = decoded; // 디코딩된 사용자 정보를 소켓에 저장
     next();
   } catch (err) {
