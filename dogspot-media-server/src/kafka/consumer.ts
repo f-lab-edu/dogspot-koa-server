@@ -45,7 +45,7 @@ export const runConsumer = async () => {
       try {
         console.log('topic: ', topic);
         console.log('topic: ', topic);
-        await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
+        // await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
         try {
           if (message.value === null) {
             console.warn('Received a message with null value');
@@ -80,4 +80,3 @@ export const runConsumer = async () => {
   });
 };
 
-runConsumer().catch(console.error);
