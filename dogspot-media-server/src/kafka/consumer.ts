@@ -49,7 +49,8 @@ export const runConsumer = async () => {
           }
           const value = message.value.toString(); // 여기서 message.value는 null이 아님을 보장합니다.
           const data = JSON.parse(value); // JSON 파싱
-
+          console.log('topic: ', topic);
+          
           let result;
 
           // 메시지 처리 로직 호출
