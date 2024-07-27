@@ -18,6 +18,8 @@ class Semaphore {
       await new Promise<void>((resolve) => this.queue.push(resolve));
     }
     this.current++;
+
+    console.log('current: ', this.current);
   }
 
   release() {
@@ -42,7 +44,7 @@ export const runConsumer = async () => {
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
       try {
         console.log('topic: ', topic);
-        
+        console.log('topic: ', topic);
         await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
         try {
           if (message.value === null) {
