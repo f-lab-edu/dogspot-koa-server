@@ -41,6 +41,8 @@ export const runConsumer = async () => {
   await consumer.run({
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
       try {
+        console.log('topic: ', topic);
+        
         await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
         try {
           if (message.value === null) {
