@@ -5,20 +5,28 @@ import { promisify } from 'util';
 import sharp from 'sharp';
 
 export class FileConvertService {
-    private readonly baseUploadPath: string =
-    process.env.BASE_FILE_DIR || '/default/path';
+    private readonly baseUploadPath: string = 
+        process.env.BASE_FILE_DIR || '/default/path'; //실제 파일이 저장될 파일 주소
 
-    async videoConvert(fileUrl: string, 
+    private readonly dbUploadPath: string =
+        process.env.DB_FILE_DIR || '/default/path'; //데이터 베이스에 저장될 폴터 주소
+
+    async videoConvert(
+        fileUrl: string, 
         filePath: string,
         subDir: string
-    ): Promise<{ outputPath: string, coverPhotoPath: string }> {
+    ): Promise<{ dbVideoPath: string, dbImgPath: string }> {
         try {
             const orifinalVideo = path.join(this.baseUploadPath, fileUrl);
             const videoFolder = path.join(this.baseUploadPath, subDir);
-
             const outputPath = path.join(videoFolder, `${filePath}.mp4`);
             const coverPhotoPath = path.join(videoFolder, `${filePath}.jpg`);
       
+            const dbFolder =  path.join(this.dbUploadPath, subDir);
+            const dbVideoPath = path.join(dbFolder, `${filePath}.mp4`);
+            const dbImgPath = path.join(dbFolder, `${filePath}.jpg`);
+      
+            
            //  /영상 저장할 폴더가 없으면 생성
             if (subDir && !fs.existsSync(videoFolder)) {
                 fs.mkdirSync(videoFolder, { recursive: true });
@@ -36,7 +44,7 @@ export class FileConvertService {
             await executeFfmpeg(
               `ffmpeg -i ${orifinalVideo} -ss 00:00:00.001 -vframes 1 ${coverPhotoPath}`
             );
-            return { outputPath, coverPhotoPath };
+            return { dbVideoPath, dbImgPath };
           } catch (err) {
             console.error('Error during video upload:', err);
             throw err;
@@ -47,13 +55,16 @@ export class FileConvertService {
         filePath: string, 
         fileName: string, 
         subDir: string
-    ): Promise<{ outputPath: string, coverPhotoPath: string }> {
+    ): Promise<{ dbVideoPath: string, dbImgPath: string }> {
         const imageFolder = path.join(this.baseUploadPath, subDir);
         const orifinalImg = path.join(this.baseUploadPath, filePath);
         
         // 경로 설정
-        const thumnailPath = path.join(subDir, `thumb_${fileName}.jpg`);
         const thumnailFilePath = path.join(imageFolder, `thumb_${fileName}.jpg`);
+
+        const dbFolder =  path.join(this.dbUploadPath, subDir);
+        const thumbNailPath = path.join(dbFolder, `thumb_${fileName}.jpg`);
+        const originalImngPath = path.join(dbFolder, fileName);
         
         // 폴더가 없으면 생성
         if (!fs.existsSync(imageFolder)) {
@@ -68,6 +79,6 @@ export class FileConvertService {
             .resize(240)
             .toFile(thumnailFilePath);
 
-        return {outputPath: filePath, coverPhotoPath: thumnailPath};
+        return {dbVideoPath: originalImngPath, dbImgPath: thumbNailPath};
     }
 }

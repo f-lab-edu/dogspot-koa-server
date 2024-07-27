@@ -21,7 +21,7 @@ export class walksService {
           if (!result) {
             throw new Error(`Failed to convert media with idx: ${mediaInfo.idx}`);
           }
-          await this.walksRepo.updateBoardMedia(mediaInfo.idx, result.outputPath, result.coverPhotoPath);
+          await this.walksRepo.updateBoardMedia(mediaInfo.idx, result.dbVideoPath, result.dbImgPath);
         } catch (error) {
           logger.error(`Error converting at walksBoard media idx ${mediaInfo.idx}:`, error);
           throw error;
