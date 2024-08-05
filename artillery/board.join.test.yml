@@ -2,7 +2,7 @@ config:
   target: 'https://dogspot.site'
   phases:
     - duration: 60  # 테스트 지속 시간 (초)
-      arrivalRate: 5  # 초당 요청 수
+      arrivalRate: 300  # 초당 요청 수
 
 scenarios:
   - flow:
@@ -10,7 +10,7 @@ scenarios:
           url: '/api/walksBoard/walksBoard/join'
           headers:
             accept: 'application/json'
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMTQ4NjcyNSwiZXhwIjoxNzIxNDkzOTI1fQ.k3-A31PpwRJ8ORiKqece1DP09wPkiLM0UWEfSGJMMzs'
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMjQxMzY0NiwiZXhwIjoxNzIyNDIwODQ2fQ.GWOpqaU0Mzs_pT4bVJ5090VOkon7Tyt-mRMAGcQnY4o'
             Content-Type: 'application/json'
           json:
             idx: 1

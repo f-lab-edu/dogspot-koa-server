@@ -9,7 +9,15 @@ const consumer = kafka.consumer({ groupId });
 
 export const runConsumer = async () => {
   await consumer.connect();
-  await consumer.subscribe({ topic: Topic.WALKS });
+  await consumer.subscribe(
+    { 
+      topics: [
+        Topic.WALKS, 
+        Topic.WALKS_ERROR,
+        Topic.WALKS_DELETE,
+      ] 
+
+    });
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
@@ -22,6 +30,12 @@ export const runConsumer = async () => {
         switch (topic) {
           case Topic.WALKS:
             await walksControllerInstance.walksJoin(data);
+            break;
+          case Topic.WALKS_ERROR:
+            await walksControllerInstance.deleteErrorWalksBoard(data);
+            break;
+          case Topic.WALKS_DELETE:
+            await walksControllerInstance.deleteWalksBoard(data);
             break;
           default:
             break;

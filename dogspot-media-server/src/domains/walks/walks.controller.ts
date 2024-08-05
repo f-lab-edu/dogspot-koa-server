@@ -11,6 +11,7 @@ export class walksController {
       const result = await this.walksService.convertMedia(walksBoardIdx);
       return result;
     } catch (error) {
+      
       console.error(`Error in walksJoin: ${error}`);
       throw new Error(`Failed to process walksJoin: ${error}`);
     }

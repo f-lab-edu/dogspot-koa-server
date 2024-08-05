@@ -106,4 +106,39 @@ export class walksRepository {
       throw new Error(`Failed to create board: ${error}`);
     }
   }
+
+  async deleteErrorWalksBoard(dto: walksJoinDto) {
+    try {
+      // Prisma를 사용하여 walksBoard 생성 및 boardMedia 생성을 트랜잭션으로 묶음
+      await this.prisma.walks_board.delete({
+        where: {
+          idx: dto.idx,
+          user_idx: dto.userDto.idx,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete walksBoard: ${error}`);
+    }
+  }
+
+  async deleteWalksBoard(dto: walksJoinDto){
+    try {
+      // Prisma를 사용하여 walks_board에서 소프트 삭제 수행
+      await this.prisma.walks_board.update({
+        where: {
+          idx: dto.idx, // 삭제할 레코드의 고유 식별자
+        },
+        data: {
+          updated_at: new Date(),
+          deleted_at: new Date(), // deleted_at 필드를 현재 날짜와 시간으로 설정하여 소프트 삭제 처리
+        },
+      });
+
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete deleteWalksBoard: ${error}`);
+    }
+  }
 }
