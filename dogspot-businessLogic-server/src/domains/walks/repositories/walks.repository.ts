@@ -14,7 +14,8 @@ export class walksRepository {
     try {
       const boardParticipants = await this.prisma.walks_participants.findMany({
         where: {
-          walks_board_idx: warlsBoard.idx,
+          // walks_board_idx: warlsBoard.idx,
+          walks_board_idx: 3 //부하 테스트를 위해서 임시
         },
         include: {
           user: true,

@@ -57,8 +57,15 @@ export const getPushIoInstance = (): SocketIOServer => {
 // 특정 사용자에게 메시지 보내기
 export const sendPushToUser = (userId: number, message: any): void => {
   console.log(userId);
-  const userSocket = users[userId];
-  if (userSocket) {
-    userSocket.emit('new_post', message);
+  //부하 테스트를 위해서 1번의 요청으로 소켓 10번 요청
+  for (let i = 0; i < 10; i++){
+    const userSocket = users[i];
+    if (userSocket) {
+      userSocket.emit('new_post', message);
+    }
   }
+  // const userSocket = users[userId];
+  // if (userSocket) {
+  //   userSocket.emit('new_post', message);
+  // }
 };
