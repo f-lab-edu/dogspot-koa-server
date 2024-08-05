@@ -25,11 +25,11 @@ app.use(cors({
 // 라우터를 미들웨어로 사용
 app.use(router.routes()).use(router.allowedMethods());
 
-// Socket.IO 설정
-setupPush(server);
-
 // 서버 포트 설정
 const PORT = 3003;
 server.listen(PORT, () => {
   runConsumer().catch(console.error);
 });
+
+// Socket.IO 설정
+setupPush(server);

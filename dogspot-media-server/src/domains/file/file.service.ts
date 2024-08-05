@@ -11,7 +11,7 @@ export class FileService {
         this.fileConvertService = new FileConvertService();
     }
     async walksBoardMediaConvert(walksMediaInfos: board_media): 
-      Promise<{ outputPath: string, coverPhotoPath: string } | undefined> {
+      Promise<{ dbVideoPath: string, dbImgPath: string } | undefined> {
         const fileNameWithExt = path.basename(walksMediaInfos.original_file_url);
         const baseFileName = fileNameWithExt.replace(/\.[^/.]+$/, ""); // 확장자를 제거합니다.
 

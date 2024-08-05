@@ -18,6 +18,8 @@ class Semaphore {
       await new Promise<void>((resolve) => this.queue.push(resolve));
     }
     this.current++;
+
+    console.log('current: ', this.current);
   }
 
   release() {
@@ -41,7 +43,9 @@ export const runConsumer = async () => {
   await consumer.run({
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
       try {
-        await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
+        console.log('topic: ', topic);
+        console.log('topic: ', topic);
+        // await semaphore.acquire();  // Semaphore를 사용하여 동시 실행 수를 제한합니다.
         try {
           if (message.value === null) {
             console.warn('Received a message with null value');
@@ -49,7 +53,8 @@ export const runConsumer = async () => {
           }
           const value = message.value.toString(); // 여기서 message.value는 null이 아님을 보장합니다.
           const data = JSON.parse(value); // JSON 파싱
-
+          console.log('topic: ', topic);
+          
           let result;
 
           // 메시지 처리 로직 호출
@@ -75,4 +80,3 @@ export const runConsumer = async () => {
   });
 };
 
-runConsumer().catch(console.error);
