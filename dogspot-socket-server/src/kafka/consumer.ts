@@ -20,19 +20,19 @@ export const runConsumer = async () => {
       let data;
       try {
         data = JSON.parse(value); // JSON 문자열을 객체로 파싱
+        // 메시지 처리가 완료되면 오프셋을 커밋합니다.
+        switch (topic) {
+          case Topic.WALKS_PUSH:
+            data.forEach((item: any) => {
+              sendPushToUser(item.userIdx, item.message);
+            });
+            break;
+          default:
+            console.log("The topic is unknown.");
+            break;
+        }
       } catch (error) {
         throw error;
-      }
-      // 메시지 처리가 완료되면 오프셋을 커밋합니다.
-      switch (topic) {
-        case Topic.WALKS_PUSH:
-          data.forEach((item: any) => {
-            sendPushToUser(item.userIdx, item.message);
-          });
-          break;
-        default:
-          console.log("The topic is unknown.");
-          break;
       }
     },
   });
