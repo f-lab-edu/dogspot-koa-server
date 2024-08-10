@@ -7,6 +7,9 @@ WORKDIR /var/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
+# Install pm2 globally
+RUN npm install -g pm2
+
 # Install app dependencies
 RUN npm install --legacy-peer-deps
 
@@ -25,5 +28,5 @@ RUN npm run build
 # Expose ports
 EXPOSE 3000
 
-# Start the application
+# Start the application using pm2
 CMD ["node", "dist/main.js"]

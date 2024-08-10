@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/main.ts",
-    "deploy": "pm2-runtime deploy.config.json --env production"
+    "deploy": "npm run build && node dist/main.js"
   },
   "keywords": [],
   "author": "",
