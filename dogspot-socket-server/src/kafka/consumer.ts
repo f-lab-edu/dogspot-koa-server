@@ -9,11 +9,13 @@ const consumer = kafka.consumer({ groupId });
 
 export const runConsumer = async () => {
   await consumer.connect();
-  await consumer.subscribe({ topic: Topic.WALKS_PUSH });
+  await consumer.subscribe({ topic: 'walks-board-create' });
   console.log('Consumer is connected and subscribed.');
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }: EachMessagePayload) => {
+      console.log('topic: ', topic);
+      
       if (message.value === null) {
         console.warn('Received null message. Skipping...');
         return;
