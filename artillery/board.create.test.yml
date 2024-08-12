@@ -2,14 +2,14 @@ config:
   target: 'https://dogspot.site'
   phases:
     - duration: 60
-      arrivalRate: 5
+      arrivalRate: 300
 
 scenarios:
   - flow:
       - post:
-          url: '/api/walksBoard/walksBoard'
+          url: '/api/walksBoard'
           headers:
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMTQ5MDIzOCwiZXhwIjoxNzIxNDk3NDM4fQ.elUAd1Hv4g-Vx_P2feRnbl3FL7aoG4MJNdO79xnEfWg'
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWR4IjoxLCJPUyI6IndlYiIsImlhdCI6MTcyMjc1Njg0MSwiZXhwIjoxNzIyNzY0MDQxfQ.EAltcCIn55b3Eg_LOJ-ikNIWg6YZhH6tGS0EM7k8tpU'
           formData:
             maxParticipants: '8'
             places: '실제 지도 위치.'
@@ -19,5 +19,5 @@ scenarios:
             meetingDatetime: '2023-06-13T00:00:00.000Z'
             title: '오늘 오후 보라메 공원에서 산책하실분?'
             description: '게시글에 대한 내용입니다.'
-            files:
-                fromFile: './video.mov'
+            # files:
+            #     fromFile: './video.mov'

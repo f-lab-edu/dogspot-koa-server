@@ -1,14 +1,14 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class boardMedia {
-  walksBoardIdx: number;
+  walksBoardIdx!: number;
 
   @IsString()
   @IsNotEmpty()
-  type: string;
+  type!: string;
 
 
-  thumbnail: string;
+  thumbnail!: string;
 
-  url: string;
+  url!: string;
 }

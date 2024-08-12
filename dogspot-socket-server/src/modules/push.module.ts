@@ -30,7 +30,6 @@ export const setupPush = (server: HttpServer): void => {
     socket.on('register', (userId: number) => {
       users[userId] = socket;
       console.log(`User ${userId} registered for push notifications`);
-      console.log(users);
     });
 
     socket.on('new_post', (post: any) => {

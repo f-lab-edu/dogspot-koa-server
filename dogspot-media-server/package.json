@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/main.ts",
-    "pm2:deploy": "pm2 start deploy.config.json --env production"
+    "deploy": "npm run build && node dist/main.js"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +14,13 @@
   "dependencies": {
     "@koa/router": "^12.0.1",
     "@prisma/client": "^5.16.2",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
     "kafkajs": "^2.2.4",
     "koa": "^2.15.3",
+    "moment-timezone": "^0.5.45",
+    "reflect-metadata": "^0.2.2",
     "sharp": "^0.33.4",
     "winston": "^3.13.1",
     "winston-daily-rotate-file": "^5.0.0"
